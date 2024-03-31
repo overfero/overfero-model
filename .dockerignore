@@ -1,0 +1,4 @@
+!poetry-overfero/
+!pyproject.toml
+!poetry.lock
+!docker
