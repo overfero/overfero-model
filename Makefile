@@ -13,7 +13,7 @@ else
 endif
 
 SERVICE_NAME = app
-CONTAINER_NAME = overfero-template-container
+CONTAINER_NAME = overfero-model-container
 
 DIRS_TO_VALIDATE = overfero
 DOCKER_COMPOSE_RUN = $(DOCKER_COMPOSE_COMMAND) run --rm app
@@ -25,9 +25,9 @@ export
 guard-%:
 	@#$(or ${$*}, $(error $* is not set))
 
-## Call entrypoint
-entrypoint: up
-	$(DOCKER_COMPOSE_EXEC) python overfero/entrypoint.py
+## Run tasks
+local-run-tasks: up
+	$(DOCKER_COMPOSE_EXEC) python overfero/run_tasks.py
 
 ## Starts jupyter lab
 notebook: up

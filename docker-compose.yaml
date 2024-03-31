@@ -4,9 +4,9 @@ services:
   app:
     user: "${USER_ID:-1000}"
     hostname: "${HOST_NAME:-overfero}"
-    image: overfero-template
+    image: overfero-model
     platform: linux/amd64
-    container_name: overfero-template-container
+    container_name: overfero-model-container
     build:
       context: .
       dockerfile: ./docker/Dockerfile
