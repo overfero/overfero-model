@@ -1,10 +1,17 @@
+from typing import Optional
+
 from hydra.core.config_store import ConfigStore
 from pydantic.dataclasses import dataclass
+
+from overfero.config_schemas.infrastructure.infrastructure_schema import (
+    InfrastructureConfig,
+)
 
 
 @dataclass
 class Config:
-    hello: str = "World"
+    infrastructure: InfrastructureConfig = InfrastructureConfig()
+    docker_image: Optional[str] = None
 
 
 def setup_config() -> None:

@@ -8,11 +8,21 @@ packages = [{include = "poetry-overfero"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-numpy = "~=1.26"
+pandas = "~=2.2.0"
 hydra-core = "~=1.3.0"
 pydantic = "~=2.6.0"
+transformers = {version = "~=4.39.0", extras = ["tensorflow"]}
+fsspec = {version = "~=2024.3.0", extras = ["gcs"]}
+gcsfs = "~=2024.3.0"
+tensorflow = "~=2.16.0"
+mlflow = "~=2.11.0"
+psycopg2-binary = "~=2.9.0"
+google-cloud-compute = "~=1.18.0"
+google-cloud-secret-manager = "~=2.18.0"
+
 
 [tool.poetry.group.dev.dependencies]
+jupyterlab = "~=4.1.0"
 pytest = "~=8.0.0"
 black = "~=24.2.0"
 isort = "~=5.13.0"
