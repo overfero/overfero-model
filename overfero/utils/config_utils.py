@@ -62,7 +62,7 @@ def save_config_as_yaml(config: Union["Config", DictConfig], save_path: str) -> 
 
 
 def load_config_header() -> str:
-    config_header_path = Path("./cybulde/configs/automatically_generated/full_config_header.yaml")
+    config_header_path = Path("./overfero/configs/automatically_generated/full_config_header.yaml")
     if not config_header_path.exists():
         config_header = {
             "defaults": [

@@ -2,7 +2,6 @@
 # If you want to modify configuration, edit source files in overfero/configs directory.
 
 defaults:
-- override hydra/job_logging: custom
 - override hydra/hydra_logging: disabled
 - _self_
 hydra:
@@ -37,18 +36,18 @@ infrastructure:
         labels:
           project: overfero
       vm_metadata_config:
-        instance_group_name: Default-None-20240401123107
+        instance_group_name: Default-None-20240406100017
         docker_image: null
         zone: asia-southeast2-a
         python_hash_seed: 98
         mlflow_tracking_uri: http://127.0.0.1:6101
         node_count: 1
         disks: []
-      template_name: Default-None-20240401123107
+      template_name: Default-None-20240406100017
       project_id: overfero
       labels:
         project: overfero
-    name: Default-None-20240401123107
+    name: Default-None-20240406100017
     node_count: 1
     project_id: overfero
     zone: asia-southeast2-a
@@ -57,8 +56,8 @@ infrastructure:
     mlflow_internal_tracking_uri: http://127.0.0.1:6101
     experiment_name: Default
     run_name: null
-    run_id: c0940937e42b4972ae6996bfad0e3025
+    run_id: 80ac4d66d55143e08e58768eb869d4aa
     experiment_id: '0'
     experiment_url: http://127.0.0.1:6101/#/experiment/None/runs/None
-    artifact_uri: /mlflow-artifact-store/0/c0940937e42b4972ae6996bfad0e3025/artifacts
+    artifact_uri: /mlflow-artifact-store/0/80ac4d66d55143e08e58768eb869d4aa/artifacts
 docker_image: null
