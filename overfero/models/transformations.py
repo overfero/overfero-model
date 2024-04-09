@@ -1,15 +1,16 @@
 import os
 
 from abc import ABC, abstractmethod
+import tensorflow as tf
 
-from transformers import AutoTokenizer, BatchEncoding, PreTrainedTokenizerBase
+from transformers import AutoTokenizer, PreTrainedTokenizerBase
 
 from overfero.utils.io_utils import is_dir, is_file, translate_gcs_dir_to_local
 
 
 class Transformation(ABC):
     @abstractmethod
-    def __call__(self, texts: list[str]) -> BatchEncoding:
+    def __call__(self, texts: list[str]):
         pass
 
 
@@ -19,8 +20,8 @@ class HuggingFaceTokenizationTransformation(Transformation):
         self.max_sequence_length = max_sequence_length
         self.tokenizer = self.get_tokenizer(pretrained_tokenizer_name_or_path)
 
-    def __call__(self, texts: list[str]) -> BatchEncoding:
-        output: BatchEncoding = self.tokenizer.batch_encode_plus(
+    def __call__(self, texts: list[str]):
+        output = self.tokenizer.batch_encode_plus(
             texts, truncation=True, padding=True, return_tensors="tf", max_length=self.max_sequence_length
         )
         return output

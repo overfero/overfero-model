@@ -10,36 +10,29 @@ class DataModule:
     def __init__(
         self,
         batch_size: int,
+        text_column_name: str,
+        label_column_name: str,
         shuffle: bool = False,
-        num_workers: int = 0,
-        drop_last: bool = False,
     ) -> None:
         self.batch_size = batch_size
         self.shuffle = shuffle
-        self.num_workers = num_workers
-        self.drop_last = drop_last
+        self.text_column_name = text_column_name
+        self.label_column_name = label_column_name
 
-    def initialize_dataloader(self, dataset: Sequence) -> tf.data.Dataset:
-        dataset = tf.data.Dataset.from_generator(
-            generator=dataset,
-            output_signature=(
-                tf.TensorSpec(shape=(), dtype=tf.string),
-                tf.TensorSpec(shape=(), dtype=tf.int32),
-            ),
-        )
-        dataset = dataset.batch(
-            batch_size=self.batch_size,
-            drop_remainder=self.drop_last,
-        )
+    def initialize_dataloader(self, dataset) -> tf.data.Dataset:
+        data_encodings = self.collate_fn(dataset[self.text_column_name])
+        data_encodings = tf.data.Dataset.from_tensor_slices(dict(data_encodings))
+        data_labels = tf.data.Dataset.from_tensor_slices(dataset[self.label_column_name])
+        dataset = tf.data.Dataset.zip(data_encodings, data_labels)
         if self.shuffle:
-            dataset = dataset.shuffle(buffer_size=len(dataset))
-        dataset = dataset.prefetch(buffer_size=tf.data.AUTOTUNE)
+            dataset = dataset.shuffle(buffer_size=2000)
+        dataset = dataset.batch(self.batch_size).prefetch(tf.data.AUTOTUNE)
         return dataset
 
 
-class PartialDataModuleType(Protocol):
-    def __call__(self, transformation: Transformation) -> DataModule:
-        pass
+# class PartialDataModuleType(Protocol):
+#     def __call__(self, transformation: Transformation) -> DataModule:
+#         pass
 
 
 class TextClassificationDataModule(DataModule):
@@ -53,21 +46,16 @@ class TextClassificationDataModule(DataModule):
         label_column_name: str,
         batch_size: int,
         shuffle: bool = False,
-        num_workers: int = 0,
-        drop_last: bool = False,
     ) -> None:
-        @tf.function
-        def tokenization_collate_fn(texts, labels) -> tuple[tf.Tensor, tf.Tensor]:
-            print("check5")
-            encodings = transformation(list(texts))
-            print("check6")
-            return encodings, labels
+        def tokenization_collate_fn(texts):
+            encodings = transformation(texts.to_list())
+            return encodings
 
         super().__init__(
             batch_size=batch_size,
             shuffle=shuffle,
-            num_workers=num_workers,
-            drop_last=drop_last,
+            text_column_name=text_column_name,
+            label_column_name=label_column_name,
         )
 
         self.collate_fn = tokenization_collate_fn
@@ -82,8 +70,11 @@ class TextClassificationDataModule(DataModule):
         if stage == "fit" or stage is None:
             train_dataset = pd.read_parquet(self.train_df_path)
             train_dataset = train_dataset[[self.text_column_name, self.label_column_name]]
-            train_dataset = tf.data.Dataset.from_tensor_slices(
-                (train_dataset[self.text_column_name].values, train_dataset[self.label_column_name].values)
-            )
-
-            self.train_dataset = train_dataset.map(self.collate_fn)
+            self.train_dataset = train_dataset
+            dev_dataset = pd.read_parquet(self.dev_df_path)
+            dev_dataset = dev_dataset[[self.text_column_name, self.label_column_name]]
+            self.dev_dataset = dev_dataset
+        elif stage == "test":
+            test_dataset = pd.read_parquet(self.test_df_path)
+            test_dataset = test_dataset[[self.text_column_name, self.label_column_name]]
+            self.test_dataset = test_dataset

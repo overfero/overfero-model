@@ -44,7 +44,7 @@ RUN poetry config virtualenvs.create false \
 USER root
 COPY ./docker/scripts/* /
 RUN chown -R ${USER_NAME} /*.sh && chmod +x /*.sh
-RUN chown -R ${USER_NAME} ${HOME}/.local
+RUN chown -R ${USER_NAME}:${USER_NAME} ${HOME}/.local
 USER ${USER_NAME}
 
 COPY . /app/
