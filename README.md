@@ -10,13 +10,13 @@ Including:
 - Data partitioning using Dask
 - Fully automated, scalable, and extendable
 
-This project consist of 3 repository:
-Data versioning:
-[Data Versiong Repository](https://github.com/overfero/cybulde-dvc.git) (Still Private)
-
-Data Preparation and Tokenizer:
-[Data Prep and Tokenizer Repository](https://github.com/overfero/cybulde-data-prep.git) (Still Private)
-
-Cyber Bulying Detection Model:
+This project consist of 3 repository: \
+Data versioning: \
+[Data Versiong Repository](https://github.com/overfero/cybulde-dvc.git) (Still Private) \
+\
+Data Preparation and Tokenizer: \
+[Data Prep and Tokenizer Repository](https://github.com/overfero/cybulde-data-prep.git) (Still Private) \
+\
+Cyber Bulying Detection Model: \
 Right now you are in that repository (Still in development)
 
