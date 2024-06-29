@@ -6,12 +6,19 @@ from overfero.utils.io_utils import translate_gcs_dir_to_local
 
 
 class BackBone(Layer):
-    pass
+    def __init__(self, transformation: Transformation) -> None:
+        super().__init__()
+        self.transformation = transformation
+
+    def get_transformation(self) -> Transformation:
+        return self.transformation
 
 
 class HuggingFaceBackbone(BackBone):
-    def __init__(self, pretrained_model_name_or_path: str, pretrained: bool = False) -> None:
-        super().__init__()
+    def __init__(
+        self, transformation: Transformation, pretrained_model_name_or_path: str, pretrained: bool = False
+    ) -> None:
+        super().__init__(transformation)
         self.backbone = self.get_backbone(pretrained_model_name_or_path, pretrained)
 
     def call(self, x):

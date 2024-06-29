@@ -1,14 +1,18 @@
+from abc import abstractmethod
 from typing import Optional
 from overfero.models.adapters import Adapter
 from overfero.models.backbones import BackBone
 from overfero.models.heads import Head
+from overfero.models.transformations import Transformation
 import tensorflow as tf
 from tensorflow.keras.layers import Layer, Dense
 from tensorflow.keras import Model
 
 
 class BaseModel(Model):
-    pass
+    @abstractmethod
+    def get_transformation(self) -> Transformation:
+        pass
 
 
 class BinaryTextClassificationModel(BaseModel):
@@ -28,3 +32,6 @@ class BinaryTextClassificationModel(BaseModel):
         x = self.adapter(x)
         x = self.head(x)
         return x
+
+    def get_transformation(self) -> Transformation:
+        return self.backbone.get_transformation()

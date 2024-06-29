@@ -26,3 +26,9 @@ def set_experiment(experiment_name: Optional[str] = None) -> None:
     except mlflow.exceptions.RestException:
         pass
     mlflow.set_experiment(experiment_name)
+
+
+def log_artifacts_for_reproducibility():
+    locations_to_store = ["./overfero", "./docker", "./pyproject.toml", "./poetry.lock"]
+    for location in locations_to_store:
+        mlflow.log_artifacts(location, "reproduction")

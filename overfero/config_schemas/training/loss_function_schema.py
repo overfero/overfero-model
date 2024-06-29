@@ -15,10 +15,18 @@ class BinaryCrossEntropyConfig(LossFunctionConfig):
     label_smoothing: float = 0
 
 
+@dataclass
+class CategoricalCrossEntropyConfig(LossFunctionConfig):
+    _target_: str = "overfero.training.loss_functions.CategoricalCrossEntropyLoss"
+    from_logits: bool = False
+    label_smoothing: float = 0
+
+
 def setup_config() -> None:
     cs = ConfigStore.instance()
     cs.store(
         name="binary_cross_entropy_schema",
-        group="tasks/loss",
+        group="tasks/training/loss",
         node=BinaryCrossEntropyConfig,
     )
+    cs.store(name="categorical_cross_entropy_schema", group="tasks/training/loss", node=CategoricalCrossEntropyConfig)

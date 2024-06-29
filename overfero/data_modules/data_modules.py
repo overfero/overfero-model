@@ -19,14 +19,14 @@ class DataModule:
         self.text_column_name = text_column_name
         self.label_column_name = label_column_name
 
-    def initialize_dataloader(self, dataset) -> tf.data.Dataset:
+    def initialize_dataloader(self, dataset, num_gpus: int) -> tf.data.Dataset:
         data_encodings = self.collate_fn(dataset[self.text_column_name])
         data_encodings = tf.data.Dataset.from_tensor_slices(dict(data_encodings))
         data_labels = tf.data.Dataset.from_tensor_slices(dataset[self.label_column_name])
         dataset = tf.data.Dataset.zip(data_encodings, data_labels)
         if self.shuffle:
             dataset = dataset.shuffle(buffer_size=2000)
-        dataset = dataset.batch(self.batch_size).prefetch(tf.data.AUTOTUNE)
+        dataset = dataset.batch(self.batch_size * num_gpus).prefetch(tf.data.AUTOTUNE)
         return dataset
 
 
